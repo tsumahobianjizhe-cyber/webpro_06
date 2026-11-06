@@ -4,6 +4,15 @@ const app = express();
 app.set('view engine', 'ejs');
 app.use("/public", express.static(__dirname + "/public"));
 
+let station = [
+  { id:1, code:"JE01", name:"東京駅"},
+  { id:2, code:"JE07", name:"舞浜駅"},
+  { id:3, code:"JE12", name:"新習志野駅"},
+  { id:4, code:"JE13", name:"幕張豊砂駅"},
+  { id:5, code:"JE14", name:"海浜幕張駅"},
+  { id:6, code:"JE05", name:"新浦安駅"}
+]
+
 app.get("/hello1", (req, res) => {
   const message1 = "Hello world";
   const message2 = "Bon jour";
@@ -88,6 +97,10 @@ app.get("/janken2", (req, res) => {
     total: total
   }
   res.render( 'janken2', display );
+});
+
+app.get("/keiyo", (req, res) => {
+  res.render('db2', {data:station});
 });
 
 app.listen(8080, () => console.log("Example app listening on port 8080!"));
