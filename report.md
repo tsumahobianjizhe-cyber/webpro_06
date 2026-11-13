@@ -10,9 +10,9 @@
 
 - 躰道技一覧表示システム
 - 千葉工業大学施設表示システム
-- 仮面ライダーシリーズ年表システム
+- 仮面ライダーシステム
 
-現段階では，躰道技一覧表示システムのみを設計する．残り2つのシステムは，データのスキームを用意してから設計する．
+現段階では，躰道技一覧表示システムと仮面ライダーシステムを設計する．千葉工業大学施設表示システムは，データのスキームを用意してから設計する．
 
 # 躰道技一覧表示システム
 
@@ -59,4 +59,52 @@ change_taido --> details_taido: キャンセル
 details_taido --> delete_taido: 削除確認画面を表示
 delete_taido --> start_taido: 削除を確定
 delete_taido --> details_taido: キャンセル
+```
+
+# 仮面ライダーシステム
+
+仮面ライダーの放送年，名前，必殺技，変身者の名前を記録し，一覧画面や詳細画面で確認できるシステムを作成する．一覧画面では，放送年の昇順に表示する．
+
+## 実装する予定の機能
+
+- 登録されている仮面ライダーを放送年の昇順で一覧表示する．
+- 選択した仮面ライダーの放送年，名前，必殺技，変身者の名前を詳細表示する．
+- 未登録の仮面ライダーを追加する．
+- 誤って登録した仮面ライダーの情報を削除する．
+- 仮面ライダーの名前など，登録内容に誤りがある場合は変更する．
+
+## スキーム
+
+| 項目名 | 型 | 内容 |
+| ------ | ------ | ------ |
+| id | 数値 | ライダーID |
+| year | 数値 | 放送年 |
+| name | 文字列 | 仮面ライダーの名前 |
+| special move | 文字列 | 必殺技 |
+| user_name | 文字列 | 変身者の名前 |
+
+## ページ遷移
+
+一覧画面から仮面ライダーを選択して詳細画面へ移動し，詳細画面からその仮面ライダーの変更画面または削除確認画面へ移動する．追加・変更・削除の確定後は一覧画面へ戻る．キャンセル時は，追加画面からは一覧画面へ，変更画面と削除確認画面からは詳細画面へ戻る．
+
+```mermaid
+stateDiagram-v2
+[*] --> start_rider
+
+start_rider: /rider(仮面ライダーの一覧)
+details_rider: /rider/:id(仮面ライダーの詳細)
+add_rider: /rider/new(仮面ライダーを追加)
+change_rider: /rider/:id/change(仮面ライダーを変更)
+delete_rider: /rider/:id/delete(削除の確認)
+start_rider --> details_rider: 詳細表示
+details_rider --> start_rider: 一覧画面に戻る
+start_rider --> add_rider: 追加画面を表示
+add_rider --> start_rider: 追加を確定
+add_rider --> start_rider: キャンセル
+details_rider --> change_rider: 変更画面を表示
+change_rider --> start_rider: 変更を確定
+change_rider --> details_rider: キャンセル
+details_rider --> delete_rider: 削除確認画面を表示
+delete_rider --> start_rider: 削除を確定
+delete_rider --> details_rider: キャンセル
 ```
