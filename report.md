@@ -9,10 +9,10 @@
 本レポートでは，以下の3つのシステムを作成するにあたり，実装予定の機能，データのスキーム，ページ遷移を記述する．
 
 - 躰道技一覧表示システム
-- 千葉工業大学施設表示システム
+- 千葉工業大学施設一覧表示システム
 - 仮面ライダーシステム
 
-現段階では，躰道技一覧表示システムと仮面ライダーシステムを設計する．千葉工業大学施設表示システムは，データのスキームを用意してから設計する．
+以下に，3つのシステムの仕様を示す．
 
 # 躰道技一覧表示システム
 
@@ -59,6 +59,55 @@ change_taido --> details_taido: キャンセル
 details_taido --> delete_taido: 削除確認画面を表示
 delete_taido --> start_taido: 削除を確定
 delete_taido --> details_taido: キャンセル
+```
+
+# 千葉工業大学施設一覧表示システム
+
+千葉工業大学の施設の名前，用途，所属するキャンパスを記録し，一覧画面や詳細画面で確認できるシステムを作成する．一覧画面では，新習志野キャンパスと津田沼キャンパスに分けて施設を表示する．
+
+## 実装する予定の機能
+
+- 登録されている施設をキャンパスごとに分けて一覧表示する．
+- 選択した施設の名前，用途，キャンパス名を詳細表示する．
+- 未登録の施設を追加する．
+- 誤って登録した施設の情報を削除する．
+- 施設の名前など，登録内容に誤りがある場合は変更する．
+
+## スキーム
+
+| 項目名 | 型 | 内容 |
+| ------ | ------ | ------ |
+| id | 数値 | 施設ID |
+| name | 文字列 | 施設の名前 |
+| uses | 文字列 | 用途 |
+| campus | 文字列 | キャンパス名（新習志野・津田沼） |
+
+施設IDは，両キャンパスを通して重複しない値とする．
+
+## ページ遷移
+
+一覧画面から施設を選択して詳細画面へ移動し，詳細画面からその施設の変更画面または削除確認画面へ移動する．追加・変更・削除の確定後は一覧画面へ戻る．キャンセル時は，追加画面からは一覧画面へ，変更画面と削除確認画面からは詳細画面へ戻る．
+
+```mermaid
+stateDiagram-v2
+[*] --> start_facility
+
+start_facility: /facility(施設の一覧)
+details_facility: /facility/:id(施設の詳細)
+add_facility: /facility/new(施設を追加)
+change_facility: /facility/:id/change(施設を変更)
+delete_facility: /facility/:id/delete(削除の確認)
+start_facility --> details_facility: 詳細表示
+details_facility --> start_facility: 一覧画面に戻る
+start_facility --> add_facility: 追加画面を表示
+add_facility --> start_facility: 追加を確定
+add_facility --> start_facility: キャンセル
+details_facility --> change_facility: 変更画面を表示
+change_facility --> start_facility: 変更を確定
+change_facility --> details_facility: キャンセル
+details_facility --> delete_facility: 削除確認画面を表示
+delete_facility --> start_facility: 削除を確定
+delete_facility --> details_facility: キャンセル
 ```
 
 # 仮面ライダーシステム
